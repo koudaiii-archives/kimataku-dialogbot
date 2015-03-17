@@ -29,6 +29,8 @@ TweetStream.configure do |config|
 end
 stream = TweetStream::Client.new
 
+context=""
+
 log.info('Working up to save the world... %s' % ["#{Time.now}"])
 log.info('Listening... %s' % ["#{Time.now}"])
 
@@ -64,14 +66,14 @@ def reply_text(text="")
   body = {}
   body['utt'] = text
   body['t'] = 20
-
+  body['context'] = context
   request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' =>'application/json'})
   request.body = body.to_json
 
   response = nil
   resp = http.request(request)
   response = JSON.parse(resp.body)
-
+  context = response['context']
   return response['utt']
 end
 
